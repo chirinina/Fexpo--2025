@@ -4,6 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PREINSCRITO-FEXPO 2025</title>
+    <!-- Agrega el CSS de flatpickr -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+
+    <!-- Agrega el script de flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <!-- Agrega el archivo de idioma español -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -334,16 +345,30 @@
                   <div>
                     <label
                       class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                      >Fecha Nacimiento
-                      <span class="text-red-500">*</span></label
                     >
+                      Fecha Nacimiento
+                      <span class="text-red-500">*</span>
+                    </label>
                     <input
-                      type="date"
+                      type="text"
                       id="fechaNacimiento"
                       required
                       class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      placeholder="Seleccionar fecha"
                     />
                   </div>
+
+                  <!-- Inicializa flatpickr con configuración en español -->
+                  <script>
+                    flatpickr("#fechaNacimiento", {
+                      locale: "es", // Configura el idioma a español
+                      dateFormat: "Y-m-d", // Formato de fecha (año-mes-día)
+                      minDate: "1788-01-01", // Fecha mínima (1 de enero de 1788)
+                      maxDate: new Date().toISOString().split("T")[0], // Fecha máxima (hoy)
+                      disableMobile: false, // Habilitar en dispositivos móviles
+                    });
+                  </script>
+
                   <div>
                     <label
                       class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
@@ -404,6 +429,7 @@
                       <option value="Maestría">Maestría</option>
                       <option value="Doctorado">Doctorado</option>
                       <option value="Diplomado">Diplomado</option>
+                      <option value="Otro">Otro</option>
                     </select>
                   </div>
                   <div>
