@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PREINSCRITO-FEXPO 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+    <link
+      href="https://unpkg.com/@heroicons/react@1.0.6/24/solid.js"
+      rel="stylesheet"
+    />
+    <style>
+      .bg-yellow-gradient {
+        background: linear-gradient(
+          135deg,
+          #fef08a 0%,
+          #fde047 50%,
+          #facc15 100%
+        );
+      }
+    </style>
+  </head>
+  <body class="min-h-screen bg-gray-200 dark:bg-gray-900">
+    <!-- Botón Admin -->
+    <div class="fixed top-4 right-4 z-50">
+      <button
+        onclick="toggleAdminPanel()"
+        class="bg-yellow-500 text-gray-900 px-6 py-3 rounded-full hover:bg-yellow-600 transition-all shadow-lg flex items-center gap-2 font-medium"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Contenedor principal con imagen -->
+    <div class="container mx-auto px-4 py-12 flex flex-col md:flex-row gap-8">
+      <!-- Imagen de presentación -->
+      <div class="w-full md:w-1/3 lg:w-2/5 relative">
+        <div class="sticky top-4 md:top-20 h-full">
+          <!-- Contenedor de imagen principal con superposición -->
+          <div class="relative">
+            <!-- Imagen principal (misma en todos los dispositivos) -->
+            <img
+              src="/microcredenciales.jpg"
+              alt="Estudiantes universitarios"
+              class="w-full h-auto rounded-2xl shadow-xl object-cover max-h-[60vh] md:max-h-[80vh]"
+            />
+
+            <!-- Imagen pequeña superpuesta (más grande en desktop) -->
+            <div
+              class="absolute -top-3 -left-3 w-16 h-16 sm:w-20 sm:h-20 md:-top-8 md:-left-9 md:w-30 md:h-18 border-1 border-white rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition-transform duration-300"
+            >
+              <img
+                src="https://blogposgrado.ucontinental.edu.pe/hs-fs/hubfs/Blogposts-%20Setiembre/maestria_gestion_gerencia_publica_555450025.jpg?width=750&height=422&name=maestria_gestion_gerencia_publica_555450025.jpg"
+                alt="Logo Universidad Siglo XX"
+                class="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          <!-- Texto (ajuste responsivo sin cambiar estilo) -->
+          <div class="mt-3 md:mt-4 text-center px-2 md:px-0">
+            <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-800">
+              Formación Continua 2025
+            </h3>
+            <p
+              class="text-xs sm:text-sm md:text-base text-gray-600 mt-1 md:mt-2"
+            >
+              Especialízate con nuestros cursos profesionales
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Formulario de Registro -->
+      <div id="registroForm" class="md:w-2/3 lg:w-3/5 py-8">
+        <div
+          class="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto border border-gray-200"
+        >
+          <div class="text-center mb-8">
+            <h1
+              class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-yellow-700 mb-4"
+            >
+              Formación Continua 2025
+            </h1>
+            <p class="text-gray-600">
+              Registro de profesionales para cursos de especialización
+            </p>
+          </div>
+
+          <form id="formulario" class="space-y-4 sm:space-y-6 md:space-y-8">
+            <!-- Tabs de Navegación - Super Responsivo -->
+            <div
+              class="flex overflow-x-auto scrollbar-hide pb-1 sm:pb-2 space-x-2 sm:space-x-4 border-b border-gray-200"
+            >
+              <button
+                type="button"
+                data-tab="personal"
+                class="tab-button active shrink-0 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm md:text-base text-gray-600 hover:text-yellow-700 transition-all font-medium border-b-2 border-yellow-500"
+              >
+                Datos Personales
+              </button>
+              <button
+                type="button"
+                data-tab="academico"
+                class="tab-button shrink-0 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm md:text-base text-gray-600 hover:text-yellow-700 transition-all font-medium"
+              >
+                Formación Académica
+              </button>
+              <button
+                type="button"
+                data-tab="contacto"
+                class="tab-button shrink-0 px-3 py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm md:text-base text-gray-600 hover:text-yellow-700 transition-all font-medium"
+              >
+                Contacto y Cursos
+              </button>
+            </div>
+
+            <!-- Contenido de Tabs -->
+            <div class="tab-content active" data-tab="personal">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6"
+              >
+                <div class="space-y-4">
+                  <!-- Nombres -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Nombres *</label
+                    >
+                    <input
+                      type="text"
+                      id="nombres"
+                      required
+                      class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      placeholder="Ingrese sus nombres"
+                    />
+                  </div>
+
+                  <!-- Apellidos -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Apellidos *</label
+                    >
+                    <div class="flex gap-4">
+                      <input
+                        type="text"
+                        id="apellido1"
+                        required
+                        class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Primer apellido"
+                      />
+                      <input
+                        type="text"
+                        id="apellido2"
+                        class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Segundo apellido"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- CI y Extensión abreviado -->
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1"
+                      >Carnet de Identidad *</label
+                    >
+                    <div class="flex gap-4">
+                      <input
+                        type="number"
+                        id="documento"
+                        required
+                        class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-0 focus:border-yellow-500"
+                        placeholder="N° CI"
+                      />
+                      <select
+                        id="extension"
+                        required
+                        class="w-24 px-3 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:outline-none focus:ring-0 focus:border-yellow-500"
+                      >
+                        <option value="">Ext.</option>
+                        <option value="Tj">Tj</option>
+                        <option value="Ch">Ch</option>
+                        <option value="Pt">Pt</option>
+                        <option value="Sc">Sc</option>
+                        <option value="Be">Be</option>
+                        <option value="Pa">Pa</option>
+                        <option value="Lp">Lp</option>
+                        <option value="Or">Or</option>
+                        <option value="Cb">Cb</option>
+                        <option value="Ext">Ext</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- Género y Dirección -->
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Género *</label
+                      >
+                      <select
+                        id="genero"
+                        required
+                        class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      >
+                        <option value="">Seleccionar...</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Dirección</label
+                      >
+                      <input
+                        type="text"
+                        id="direccion"
+                        class="w-full px-4 py-3 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Zona o barrio"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Fecha Nacimiento *</label
+                    >
+                    <input
+                      type="date"
+                      id="fechaNacimiento"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Ubicación *</label
+                    >
+                    <div class="grid grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                      <input
+                        type="text"
+                        id="departamento"
+                        required
+                        class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Departamento"
+                      />
+                      <input
+                        type="text"
+                        id="ciudad"
+                        required
+                        class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                        placeholder="Ciudad"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Dirección *</label
+                    >
+                    <input
+                      type="text"
+                      id="direccion"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sección Académica -->
+            <div class="tab-content hidden" data-tab="academico">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6"
+              >
+                <div class="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Grado Académico *</label
+                    >
+                    <select
+                      id="grado"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    >
+                      <option value="">Seleccionar...</option>
+                      <option value="Licenciatura">Licenciatura</option>
+                      <option value="Maestría">Maestría</option>
+                      <option value="Doctorado">Doctorado</option>
+                      <option value="Diplomado">Diplomado</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Profesión *</label
+                    >
+                    <input
+                      type="text"
+                      id="profesion"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+                <div class="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Institución de Egreso *</label
+                    >
+                    <input
+                      type="text"
+                      id="institucion"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Año de Egreso</label
+                    >
+                    <input
+                      type="number"
+                      id="anoEgreso"
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sección Contacto y Cursos -->
+            <div class="tab-content hidden" data-tab="contacto">
+              <div
+                class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 md:gap-6"
+              >
+                <div class="space-y-2 sm:space-y-3 md:space-y-4">
+                  <div>
+                    <label
+                      class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                      >Contacto *</label
+                    >
+                    <input
+                      type="tel"
+                      id="telefono"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+                      placeholder="Teléfono Móvil"
+                    />
+                    <input
+                      type="email"
+                      id="email"
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent mt-2 sm:mt-3 md:mt-4"
+                      placeholder="Correo Electrónico"
+                    />
+                  </div>
+                </div>
+
+                <div class="space-y-2 sm:space-y-3 md:space-y-4">
+                  <label
+                    class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
+                    >Selección de Cursos *</label
+                  >
+                  <div class="relative">
+                    <select
+                      id="cursos"
+                      multiple
+                      required
+                      class="w-full px-3 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 text-xs sm:text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-800 focus:ring-2 focus:ring-yellow-500 focus:border-transparent h-28 sm:h-36 md:h-48"
+                    >
+                      <option value="Transformación Digital">
+                        1. Transformación Digital
+                      </option>
+                      <option value="Inicialización al Idioma Alemán">
+                        2. Inicialización al Idioma Alemán
+                      </option>
+                      <option value="Gestión y Evaluación de Proyectos">
+                        3. Gestión y Evaluación de Proyectos
+                      </option>
+                      <option value="Ciencia de Datos con Python">
+                        4. Ciencia de Datos con Python
+                      </option>
+                      <option value="Planificación Educativa">
+                        5. Planificación Educativa
+                      </option>
+                      <option value="Educación Inclusiva">
+                        6. Educación Inclusiva
+                      </option>
+                      <option value="Mercado de Valores">
+                        7. Mercado de Valores
+                      </option>
+                      <option value="Data Analytics">8. Data Analytics</option>
+                      <option value="Toxicología">9. Toxicología</option>
+                      <option value="Terapias Nutricionales">
+                        10. Terapias Nutricionales
+                      </option>
+                      <option value="Central de Esterilización">
+                        11. Central de Esterilización
+                      </option>
+                      <option value="Investigación con IA">
+                        12. Investigación con IA
+                      </option>
+                      <option value="Inmunonutrición">
+                        13. Inmunonutrición
+                      </option>
+                      <option value="Formación Basada en Competencias">
+                        14. Formación Basada en Competencias
+                      </option>
+                      <option value="Epidemiología">16. Epidemiología</option>
+                      <option value="Lean Construction">
+                        17. Lean Construction
+                      </option>
+                    </select>
+                    <div
+                      class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none"
+                    >
+                      <svg
+                        class="h-3 w-3 sm:h-4 sm:w-4 md:h-6 md:w-6 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <p class="text-xxs sm:text-xs md:text-sm text-gray-500">
+                    Mantén presionado Ctrl para seleccionar múltiples cursos
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="flex justify-between pt-4 sm:pt-6 md:pt-8 border-t border-gray-200"
+            >
+              <button
+                type="button"
+                onclick="previousTab()"
+                class="bg-gray-200 text-gray-700 px-3 py-1.5 sm:px-4 sm:py-2 md:px-8 md:py-3 rounded-lg hover:bg-gray-300 transition-all hidden font-medium text-xs sm:text-sm md:text-base"
+              >
+                Anterior
+              </button>
+              <button
+                type="button"
+                onclick="nextTab()"
+                class="bg-yellow-500 text-gray-900 px-3 py-1.5 sm:px-4 sm:py-2 md:px-8 md:py-3 rounded-lg hover:bg-yellow-600 transition-all ml-auto font-medium text-xs sm:text-sm md:text-base"
+              >
+                Siguiente
+              </button>
+              <button
+                type="submit"
+                class="bg-yellow-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 md:px-8 md:py-3 rounded-lg hover:bg-yellow-700 transition-all hidden font-medium text-xs sm:text-sm md:text-base"
+              >
+                Enviar Registro
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de Administración Premium -->
+    <div
+      id="adminPanel"
+      class="hidden fixed inset-0 bg-gray-900/90 backdrop-blur-xl z-50 overflow-y-auto"
+    >
+      <div class="container mx-auto p-8 max-w-7xl">
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+          <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-bold text-gray-800">
+              Panel de Administración
+            </h2>
+            <button
+              onclick="toggleAdminPanel()"
+              class="text-gray-500 hover:text-gray-700 transition-all"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="flex flex-wrap gap-4 mb-6">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Buscar registros..."
+              class="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
+            />
+            <button
+              onclick="exportToExcel()"
+              class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 flex items-center gap-2 font-medium"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              Excel
+            </button>
+            <button
+              onclick="exportToPDF()"
+              class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 flex items-center gap-2 font-medium"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              PDF
+            </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-gray-200">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                  >
+                    Nombres
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                  >
+                    Documento
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                  >
+                    Contacto
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                  >
+                    Profesión
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-sm font-semibold text-gray-700"
+                  >
+                    Cursos
+                  </th>
+                  <th
+                    class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                  >
+                    Registro
+                  </th>
+                </tr>
+              </thead>
+              <tbody
+                id="registrosTable"
+                class="divide-y divide-gray-200 bg-white"
+              >
+                <!-- Datos dinámicos -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // CACHE AGGRESIVO DE ELEMENTOS (solo una vez al inicio)
+      const elements = {
+        // Tabs y formulario
+        tabs: document.querySelectorAll(".tab-content"),
+        tabButtons: document.querySelectorAll(".tab-button"),
+        form: document.getElementById("formulario"),
+
+        // Botones de navegación
+        prevBtn: document.querySelector('[onclick="previousTab()"]'),
+        nextBtn: document.querySelector('[onclick="nextTab()"]'),
+        submitBtn: document.querySelector('[type="submit"]'),
+
+        // Panel admin
+        registroForm: document.getElementById("registroForm"),
+        adminPanel: document.getElementById("adminPanel"),
+        registrosTable: document.getElementById("registrosTable"),
+        searchInput: document.getElementById("searchInput"),
+
+        // Inputs del formulario (cache dinámico)
+        inputs: {},
+      };
+
+      // Llenar cache de inputs de forma optimizada
+      document
+        .querySelectorAll("#formulario input, #formulario select")
+        .forEach((input) => {
+          elements.inputs[input.id] = input;
+        });
+
+      // ESTADO OPTIMIZADO
+      const state = {
+        currentTab: 0,
+        registros: JSON.parse(localStorage.getItem("registrosFexpo")) || [],
+        searchCache: new Map(), // Cache para búsquedas
+      };
+
+      // OPTIMIZACIÓN DE RENDERIZADO
+      const renderRow = (registro) => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-gray-50 transition-all";
+        tr.innerHTML = `
+            <td class="px-6 py-4 text-sm text-gray-800">${registro.nombres} ${
+          registro.apellido1
+        }</td>
+            <td class="px-6 py-4 text-sm text-gray-800">${registro.documento} ${
+          registro.extension
+        }</td>
+            <td class="px-6 py-4 text-sm text-gray-800">
+              <div class="text-gray-700">${registro.telefono}</div>
+              <div class="text-blue-500 text-xs">${registro.email}</div>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-800">${
+              registro.profesion
+            }</td>
+            <td class="px-6 py-4 text-sm text-gray-800">
+              <div class="flex flex-wrap gap-2 max-w-xs">
+                ${registro.cursos
+                  .map(
+                    (curso) =>
+                      `<span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">${curso}</span>`
+                  )
+                  .join("")}
+              </div>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500">${new Date(
+              registro.timestamp
+            ).toLocaleDateString()}</td>
+          `;
+        return tr;
+      };
+
+      // TAB SYSTEM ULTRA OPTIMIZADO
+      const showTab = (n) => {
+        // Usar classList con múltiples clases para mejor performance
+        elements.tabs.forEach((tab, index) => {
+          tab.classList.toggle("active", index === n);
+          tab.classList.toggle("hidden", index !== n);
+        });
+
+        elements.tabButtons.forEach((btn, index) => {
+          const active = index === n;
+          btn.classList.toggle("active", active);
+          btn.classList.toggle("text-yellow-700", active);
+          btn.classList.toggle("border-yellow-500", active);
+        });
+
+        // Optimización: Solo actualizar lo necesario
+        elements.prevBtn.classList.toggle("hidden", n === 0);
+        elements.submitBtn.classList.toggle("hidden", n !== 2);
+        elements.nextBtn.classList.toggle("hidden", n === 2);
+      };
+
+      // NAVEGACIÓN CON CACHE
+      const nextTab = () => {
+        if (state.currentTab < 2) {
+          state.currentTab++;
+          showTab(state.currentTab);
+        }
+      };
+
+      const previousTab = () => {
+        if (state.currentTab > 0) {
+          state.currentTab--;
+          showTab(state.currentTab);
+        }
+      };
+
+      // FORM HANDLER OPTIMIZADO
+      const handleSubmit = (e) => {
+        e.preventDefault();
+
+        // Obtener valores de forma optimizada usando cache
+        const formData = {
+          nombres: elements.inputs.nombres.value.trim(),
+          apellido1: elements.inputs.apellido1.value.trim(),
+          apellido2: elements.inputs.apellido2.value.trim(),
+          documento: elements.inputs.documento.value.trim(),
+          extension: elements.inputs.extension.value.trim(),
+          genero: elements.inputs.genero.value,
+          fechaNacimiento: elements.inputs.fechaNacimiento.value,
+          departamento: elements.inputs.departamento.value.trim(),
+          ciudad: elements.inputs.ciudad.value.trim(),
+          direccion: elements.inputs.direccion.value.trim(),
+          grado: elements.inputs.grado.value,
+          profesion: elements.inputs.profesion.value.trim(),
+          institucion: elements.inputs.institucion.value.trim(),
+          telefono: elements.inputs.telefono.value.trim(),
+          email: elements.inputs.email.value.trim(),
+          cursos: Array.from(elements.inputs.cursos.selectedOptions).map(
+            (o) => o.value
+          ),
+          timestamp: new Date().toISOString(),
+        };
+
+        // Validación optimizada
+        const requiredFields = [
+          { field: formData.nombres, name: "Nombres" },
+          { field: formData.apellido1, name: "Primer Apellido" },
+          { field: formData.documento, name: "Documento" },
+          { field: formData.genero, name: "Género" },
+          { field: formData.fechaNacimiento, name: "Fecha de Nacimiento" },
+          { field: formData.departamento, name: "Departamento" },
+          { field: formData.ciudad, name: "Ciudad" },
+          { field: formData.direccion, name: "Dirección" },
+          { field: formData.grado, name: "Grado Académico" },
+          { field: formData.profesion, name: "Profesión" },
+          { field: formData.institucion, name: "Institución" },
+          { field: formData.telefono, name: "Teléfono" },
+          { field: formData.email, name: "Email" },
+          { field: formData.cursos.length, name: "Cursos" },
+        ];
+
+        const missingField = requiredFields.find((item) => !item.field);
+        if (missingField) {
+          alert(`⚠️ Campo obligatorio faltante: ${missingField.name}`);
+          return;
+        }
+
+        // Validar documento único con búsqueda optimizada
+        const exists = state.registros.some(
+          (r) => r.documento === formData.documento
+        );
+        if (exists) {
+          alert("⚠️ Este documento ya está registrado");
+          return;
+        }
+
+        // Actualizar estado y storage de forma optimizada
+        state.registros = [...state.registros, formData];
+        localStorage.setItem("registrosFexpo", JSON.stringify(state.registros));
+
+        alert("✅ Registro exitoso");
+        elements.form.reset();
+        showTab(0);
+      };
+
+      // ADMIN PANEL OPTIMIZADO
+      const toggleAdminPanel = () => {
+        elements.registroForm.classList.toggle("hidden");
+        elements.adminPanel.classList.toggle("hidden");
+
+        if (!elements.adminPanel.classList.contains("hidden")) {
+          loadRegistros();
+        }
+      };
+
+      // RENDERIZADO ULTRA RÁPIDO CON DOCUMENT FRAGMENT
+      const loadRegistros = () => {
+        const fragment = document.createDocumentFragment();
+
+        // Usar for loop clásico para mejor performance con muchos registros
+        for (let i = 0; i < state.registros.length; i++) {
+          fragment.appendChild(renderRow(state.registros[i]));
+        }
+
+        // Limpiar y renderizar en una sola operación
+        elements.registrosTable.innerHTML = "";
+        elements.registrosTable.appendChild(fragment);
+      };
+
+      // BÚSQUEDA CON CACHE Y DEBOUNCE
+      const handleSearch = (() => {
+        let timeout;
+        return (e) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => {
+            const term = e.target.value.toLowerCase();
+
+            // Usar cache si está disponible
+            if (state.searchCache.has(term)) {
+              filterRows(state.searchCache.get(term));
+              return;
+            }
+
+            const results = state.registros.filter((reg) =>
+              JSON.stringify(reg).toLowerCase().includes(term)
+            );
+
+            // Actualizar cache
+            state.searchCache.set(term, results);
+            filterRows(results);
+          }, 50);
+        };
+      })();
+
+      // FILTRADO OPTIMIZADO
+      const filterRows = (filteredData) => {
+        const rows = elements.registrosTable.querySelectorAll("tr");
+        const showAll = !filteredData;
+
+        // Usar for loop clásico para mejor performance
+        for (let i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          row.style.display = showAll ? "" : "none";
+
+          if (!showAll) {
+            const registro = state.registros[i];
+            if (filteredData.includes(registro)) {
+              row.style.display = "";
+            }
+          }
+        }
+      };
+
+      // EXPORTACIÓN RÁPIDA
+      const exportToExcel = () => {
+        const datosParaExcel = state.registros.map((registro) => ({
+          ...registro,
+          cursos: registro.cursos.join(", "),
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(datosParaExcel);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Registros");
+        XLSX.writeFile(wb, "registros_fexpo.xlsx");
+      };
+
+      const exportToPDF = () => {
+        const doc = new jspdf.jsPDF();
+        doc.autoTable({
+          head: [["Nombres", "Documento", "Contacto", "Profesión", "Cursos"]],
+          body: state.registros.map((r) => [
+            `${r.nombres} ${r.apellido1}`,
+            `${r.documento} ${r.extension}`,
+            `${r.telefono}\n${r.email}`,
+            r.profesion,
+            r.cursos.join(", "),
+          ]),
+          theme: "grid",
+          styles: { fontSize: 8 },
+          headStyles: { fillColor: [234, 179, 8] },
+        });
+        doc.save("registros_fexpo.pdf");
+      };
+
+      // INICIALIZACIÓN RÁPIDA
+      const init = () => {
+        // Asignar eventos de forma optimizada
+        elements.form.addEventListener("submit", handleSubmit);
+        elements.searchInput.addEventListener("input", handleSearch);
+
+        // Mostrar primera tab
+        showTab(0);
+
+        // Precargar datos si es necesario
+        if (state.registros.length > 0) {
+          requestIdleCallback(() => {
+            loadRegistros();
+          });
+        }
+      };
+
+      // Iniciar cuando el DOM esté listo
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    </script>
+  </body>
+</html>
